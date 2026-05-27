@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Equipos de Futbol</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="scoreboard" aria-label="Resumen de equipos">
+        <div>
+          <p class="eyebrow">Simulador</p>
+          <h1>Equipos de futbol</h1>
+        </div>
+
+        <div class="score-grid">
+          <article class="score-card team-a">
+            <span>Equipo A</span>
+            <strong id="teamATotal">0</strong>
+          </article>
+          <article class="score-card balance-card">
+            <span>Diferencia</span>
+            <strong id="differenceScore" class="diff good">0</strong>
+          </article>
+          <article class="score-card team-b">
+            <span>Equipo B</span>
+            <strong id="teamBTotal">0</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="player-builder" aria-label="Crear jugador">
+          <div class="panel-heading">
+            <h2>Nuevo jugador</h2>
+            <button class="ghost-button" id="clearAllButton" type="button">Limpiar</button>
+          </div>
+
+          <form id="playerForm" class="player-form">
+            <label>
+              Nombre
+              <input id="playerName" name="playerName" type="text" placeholder="Ej. Valderrama" required />
+            </label>
+
+            <label>
+              Equipo
+              <select id="playerTeam" name="playerTeam">
+                <option value="A">Equipo A</option>
+                <option value="B">Equipo B</option>
+              </select>
+            </label>
+
+            <div id="attributeControls" class="attributes-form"></div>
+
+            <button class="primary-button" type="submit">Agregar jugador</button>
+          </form>
+        </aside>
+
+        <section class="pitch-wrap" aria-label="Cancha y jugadores">
+          <div class="pitch">
+            <div class="pitch-lines">
+              <div class="center-circle"></div>
+              <div class="mid-line"></div>
+              <div class="box box-left"></div>
+              <div class="box box-right"></div>
+              <div class="goal goal-left"></div>
+              <div class="goal goal-right"></div>
+            </div>
+
+            <div class="team-zone left-zone">
+              <header>
+                <h2>Equipo A</h2>
+                <span id="teamACount">0 jugadores</span>
+              </header>
+              <div id="teamAPlayers" class="players-grid"></div>
+            </div>
+
+            <div class="team-zone right-zone">
+              <header>
+                <h2>Equipo B</h2>
+                <span id="teamBCount">0 jugadores</span>
+              </header>
+              <div id="teamBPlayers" class="players-grid"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="playerCardTemplate">
+      <article class="player-card">
+        <div class="player-card-top">
+          <div>
+            <h3></h3>
+            <p></p>
+          </div>
+          <button class="icon-button delete-player" type="button" aria-label="Eliminar jugador">x</button>
+        </div>
+        <dl class="attribute-list"></dl>
+      </article>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
