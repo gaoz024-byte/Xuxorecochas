@@ -8,33 +8,6 @@
   </head>
   <body>
     <main class="app-shell">
-      <section class="admin-bar" aria-label="Acceso de administrador">
-        <form id="adminLoginForm" class="admin-login" autocomplete="off">
-          <label>
-            Administrador
-            <input id="adminUser" name="adminUser" type="text" placeholder="Usuario" autocomplete="username" />
-          </label>
-          <label>
-            Clave
-            <input
-              id="adminPassword"
-              name="adminPassword"
-              type="password"
-              placeholder="Clave"
-              autocomplete="current-password"
-            />
-          </label>
-          <button class="primary-button small-button" type="submit">Entrar</button>
-        </form>
-
-        <div id="adminSession" class="admin-session hidden">
-          <span>Modo administrador activo</span>
-          <button class="ghost-button" id="logoutButton" type="button">Salir</button>
-        </div>
-
-        <p id="loginMessage" class="login-message" aria-live="polite"></p>
-      </section>
-
       <section class="scoreboard" aria-label="Resumen de equipos">
         <div>
           <p class="eyebrow">Simulador</p>
@@ -58,37 +31,16 @@
       </section>
 
       <section class="workspace">
-        <aside class="player-builder locked" id="playerBuilder" aria-label="Crear jugador">
+        <aside class="roster-panel" aria-label="Jugadores disponibles">
           <div class="panel-heading">
-            <h2>Nuevo jugador</h2>
-            <button class="ghost-button" id="clearAllButton" type="button" disabled>Limpiar</button>
+            <h2>Jugadores disponibles</h2>
+            <button class="ghost-button" id="resetTeamsButton" type="button">Reiniciar</button>
           </div>
-
-          <p class="locked-note" id="lockedNote">
-            Inicia sesion como administrador para agregar jugadores o modificar estadisticas.
-          </p>
-
-          <form id="playerForm" class="player-form">
-            <label>
-              Nombre
-            <input id="playerName" name="playerName" type="text" placeholder="Ej. Valderrama" required disabled />
-            </label>
-
-            <label>
-              Equipo
-              <select id="playerTeam" name="playerTeam" disabled>
-                <option value="A">Equipo A</option>
-                <option value="B">Equipo B</option>
-              </select>
-            </label>
-
-            <div id="attributeControls" class="attributes-form"></div>
-
-            <button class="primary-button" type="submit" disabled>Agregar jugador</button>
-          </form>
+          <p class="hint">Arrastra cada tarjeta a un equipo.</p>
+          <div id="benchPlayers" class="players-grid bench-grid drop-zone" data-team="bench"></div>
         </aside>
 
-        <section class="pitch-wrap" aria-label="Cancha y jugadores">
+        <section class="pitch-wrap" aria-label="Cancha y equipos">
           <div class="pitch">
             <div class="pitch-lines">
               <div class="center-circle"></div>
@@ -99,7 +51,7 @@
               <div class="goal goal-right"></div>
             </div>
 
-            <div class="team-zone left-zone">
+            <div class="team-zone left-zone drop-zone" data-team="A">
               <header>
                 <h2>Equipo A</h2>
                 <span id="teamACount">0 jugadores</span>
@@ -107,7 +59,7 @@
               <div id="teamAPlayers" class="players-grid"></div>
             </div>
 
-            <div class="team-zone right-zone">
+            <div class="team-zone right-zone drop-zone" data-team="B">
               <header>
                 <h2>Equipo B</h2>
                 <span id="teamBCount">0 jugadores</span>
@@ -120,13 +72,13 @@
     </main>
 
     <template id="playerCardTemplate">
-      <article class="player-card">
+      <article class="player-card" draggable="true">
         <div class="player-card-top">
-          <div>
+          <div class="photo-slot">Foto</div>
+          <div class="player-title">
             <h3></h3>
             <p></p>
           </div>
-          <button class="icon-button delete-player" type="button" aria-label="Eliminar jugador">x</button>
         </div>
         <dl class="attribute-list"></dl>
       </article>

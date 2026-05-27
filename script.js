@@ -2,103 +2,189 @@ const attributes = [
   "Ataque",
   "Defensa",
   "Velocidad",
-  "Creatividad",
+  "Físico",
   "Dominio",
   "Pase",
   "Disparo al arco",
 ];
 
-const storageKey = "football-simulator-players";
-const adminCredentials = {
-  user: "admin",
-  password: "admin123",
-};
+const roster = [
+  {
+    id: "xuxo",
+    name: "Xuxo",
+    attributes: {
+      Ataque: 2,
+      Defensa: 4,
+      Velocidad: 5,
+      Físico: 8,
+      Dominio: 2,
+      Pase: 2,
+      "Disparo al arco": 1,
+    },
+  },
+  {
+    id: "jaime",
+    name: 'Jaime "el corrector" Gutierrez',
+    attributes: {
+      Ataque: 6,
+      Defensa: 4,
+      Velocidad: 4,
+      Físico: 2,
+      Dominio: 4,
+      Pase: 6,
+      "Disparo al arco": 6,
+    },
+  },
+  {
+    id: "rafa-el",
+    name: "Rafa él",
+    attributes: {
+      Ataque: 7,
+      Defensa: 7,
+      Velocidad: 4,
+      Físico: 5,
+      Dominio: 6,
+      Pase: 6,
+      "Disparo al arco": 8,
+    },
+  },
+  {
+    id: "pastu",
+    name: "Pastu",
+    attributes: {
+      Ataque: 7,
+      Defensa: 3,
+      Velocidad: 5,
+      Físico: 7,
+      Dominio: 4,
+      Pase: 6,
+      "Disparo al arco": 7,
+    },
+  },
+  {
+    id: "pastu-jr",
+    name: "Pastu Jr",
+    attributes: {
+      Ataque: 6,
+      Defensa: 2,
+      Velocidad: 4,
+      Físico: 6,
+      Dominio: 4,
+      Pase: 3,
+      "Disparo al arco": 5,
+    },
+  },
+  {
+    id: "roberto",
+    name: "Roberto",
+    attributes: {
+      "Arquero God": 10,
+    },
+  },
+  {
+    id: "xinxe",
+    name: "Xinxe",
+    attributes: {
+      "Arquero God": 10,
+    },
+  },
+  {
+    id: "xtilla",
+    name: "Xtilla",
+    attributes: {
+      Ataque: 2,
+      Defensa: 7,
+      Velocidad: 2,
+      Físico: 3,
+      Dominio: 3,
+      Pase: 6,
+      "Disparo al arco": 2,
+    },
+  },
+  {
+    id: "tropicono",
+    name: "Tropicoño",
+    attributes: {
+      Ataque: 8,
+      Defensa: 3,
+      Velocidad: 8,
+      Físico: 6,
+      Dominio: 7,
+      Pase: 5,
+      "Disparo al arco": 7,
+    },
+  },
+  {
+    id: "nel-son",
+    name: "Nel Son",
+    attributes: {
+      Ataque: 5,
+      Defensa: 4,
+      Velocidad: 3,
+      Físico: 4,
+      Dominio: 5,
+      Pase: 4,
+      "Disparo al arco": 5,
+    },
+  },
+  {
+    id: "loberto",
+    name: "Loberto",
+    attributes: {
+      Ataque: 4,
+      Defensa: 4,
+      Velocidad: 4,
+      Físico: 2,
+      Dominio: 2,
+      Pase: 3,
+      "Disparo al arco": 5,
+    },
+  },
+];
 
-const form = document.querySelector("#playerForm");
-const attributeControls = document.querySelector("#attributeControls");
+const assignmentsKey = "football-simulator-assignments";
 const template = document.querySelector("#playerCardTemplate");
-const clearAllButton = document.querySelector("#clearAllButton");
-const playerBuilder = document.querySelector("#playerBuilder");
-const lockedNote = document.querySelector("#lockedNote");
-const adminLoginForm = document.querySelector("#adminLoginForm");
-const adminSession = document.querySelector("#adminSession");
-const loginMessage = document.querySelector("#loginMessage");
-const logoutButton = document.querySelector("#logoutButton");
+const resetTeamsButton = document.querySelector("#resetTeamsButton");
 
-let players = loadPlayers();
-let isAdmin = false;
+let assignments = loadAssignments();
 
 if (window.location.search) {
   window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-function loadPlayers() {
+function loadAssignments() {
   try {
-    return JSON.parse(localStorage.getItem(storageKey)) ?? [];
+    const stored = JSON.parse(localStorage.getItem(assignmentsKey)) ?? {};
+    return roster.reduce((result, player) => {
+      result[player.id] = ["A", "B", "bench"].includes(stored[player.id]) ? stored[player.id] : "bench";
+      return result;
+    }, {});
   } catch {
-    return [];
+    return roster.reduce((result, player) => {
+      result[player.id] = "bench";
+      return result;
+    }, {});
   }
 }
 
-function savePlayers() {
-  localStorage.setItem(storageKey, JSON.stringify(players));
+function saveAssignments() {
+  localStorage.setItem(assignmentsKey, JSON.stringify(assignments));
 }
 
-function setFormDisabled(disabled) {
-  form.querySelectorAll("input, select, button").forEach((control) => {
-    control.disabled = disabled;
-  });
-  clearAllButton.disabled = disabled;
-}
+function getAttributeNames(player) {
+  if (player.attributes["Arquero God"]) {
+    return ["Arquero God"];
+  }
 
-function updateAdminUi() {
-  document.body.classList.toggle("is-admin", isAdmin);
-  playerBuilder.classList.toggle("locked", !isAdmin);
-  lockedNote.classList.toggle("hidden", isAdmin);
-  adminLoginForm.classList.toggle("hidden", isAdmin);
-  adminSession.classList.toggle("hidden", !isAdmin);
-  loginMessage.textContent = "";
-  setFormDisabled(!isAdmin);
-  render();
-}
-
-function makeAttributeControls() {
-  attributeControls.innerHTML = "";
-
-  attributes.forEach((attribute) => {
-    const label = document.createElement("label");
-    label.textContent = attribute;
-
-    const row = document.createElement("div");
-    row.className = "range-row";
-
-    const range = document.createElement("input");
-    range.type = "range";
-    range.name = attribute;
-    range.min = "1";
-    range.max = "10";
-    range.value = "5";
-
-    const value = document.createElement("span");
-    value.className = "range-value";
-    value.textContent = range.value;
-
-    range.addEventListener("input", () => {
-      value.textContent = range.value;
-    });
-
-    row.append(range, value);
-    label.append(row);
-    attributeControls.append(label);
-  });
+  return attributes;
 }
 
 function getPlayerTotal(player) {
-  return attributes.reduce((sum, attribute) => sum + player.attributes[attribute], 0);
+  return getAttributeNames(player).reduce((sum, attribute) => sum + player.attributes[attribute], 0);
 }
 
 function getTeamPlayers(team) {
-  return players.filter((player) => player.team === team);
+  return roster.filter((player) => assignments[player.id] === team);
 }
 
 function getTeamTotal(team) {
@@ -115,28 +201,29 @@ function starString(value) {
   return "\u2605".repeat(value) + "\u2606".repeat(10 - value);
 }
 
-function clampStat(value) {
-  return Math.min(10, Math.max(1, Number(value) || 1));
+function movePlayer(playerId, team) {
+  assignments[playerId] = team;
+  saveAssignments();
+  render();
 }
 
 function renderPlayer(player) {
   const card = template.content.firstElementChild.cloneNode(true);
   const total = getPlayerTotal(player);
-  const deleteButton = card.querySelector(".delete-player");
 
+  card.dataset.playerId = player.id;
   card.querySelector("h3").textContent = player.name;
   card.querySelector("p").textContent = `${total} puntos`;
-  deleteButton.classList.toggle("hidden", !isAdmin);
-  deleteButton.addEventListener("click", () => {
-    if (!isAdmin) return;
-
-    players = players.filter((item) => item.id !== player.id);
-    savePlayers();
-    render();
+  card.addEventListener("dragstart", (event) => {
+    event.dataTransfer.setData("text/plain", player.id);
+    card.classList.add("dragging");
+  });
+  card.addEventListener("dragend", () => {
+    card.classList.remove("dragging");
   });
 
   const list = card.querySelector(".attribute-list");
-  attributes.forEach((attribute) => {
+  getAttributeNames(player).forEach((attribute) => {
     const row = document.createElement("div");
     row.className = "attribute-row";
 
@@ -150,24 +237,7 @@ function renderPlayer(player) {
 
     const number = document.createElement("dd");
     number.className = "number";
-
-    if (isAdmin) {
-      const editor = document.createElement("input");
-      editor.type = "number";
-      editor.min = "1";
-      editor.max = "10";
-      editor.value = player.attributes[attribute];
-      editor.className = "stat-editor";
-      editor.setAttribute("aria-label", `${attribute} de ${player.name}`);
-      editor.addEventListener("change", () => {
-        player.attributes[attribute] = clampStat(editor.value);
-        savePlayers();
-        render();
-      });
-      number.append(editor);
-    } else {
-      number.textContent = player.attributes[attribute];
-    }
+    number.textContent = player.attributes[attribute];
 
     row.append(term, stars, number);
     list.append(row);
@@ -176,14 +246,17 @@ function renderPlayer(player) {
   return card;
 }
 
-function renderTeam(team, containerId, countId) {
+function renderPlayers(team, containerId, countId) {
   const container = document.querySelector(containerId);
-  const count = document.querySelector(countId);
   const teamPlayers = getTeamPlayers(team);
 
   container.innerHTML = "";
   teamPlayers.forEach((player) => container.append(renderPlayer(player)));
-  count.textContent = `${teamPlayers.length} ${teamPlayers.length === 1 ? "jugador" : "jugadores"}`;
+
+  if (countId) {
+    const count = document.querySelector(countId);
+    count.textContent = `${teamPlayers.length} ${teamPlayers.length === 1 ? "jugador" : "jugadores"}`;
+  }
 }
 
 function renderScores() {
@@ -199,75 +272,41 @@ function renderScores() {
 }
 
 function render() {
-  renderTeam("A", "#teamAPlayers", "#teamACount");
-  renderTeam("B", "#teamBPlayers", "#teamBCount");
+  renderPlayers("bench", "#benchPlayers");
+  renderPlayers("A", "#teamAPlayers", "#teamACount");
+  renderPlayers("B", "#teamBPlayers", "#teamBCount");
   renderScores();
 }
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  if (!isAdmin) return;
-
-  const data = new FormData(form);
-  const name = data.get("playerName").trim();
-  const playerAttributes = {};
-
-  if (!name) {
-    document.querySelector("#playerName").focus();
-    return;
-  }
-
-  attributes.forEach((attribute) => {
-    playerAttributes[attribute] = Number(data.get(attribute));
+document.querySelectorAll(".drop-zone").forEach((zone) => {
+  zone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    zone.classList.add("drag-over");
   });
 
-  players.push({
-    id: crypto.randomUUID(),
-    name,
-    team: data.get("playerTeam"),
-    attributes: playerAttributes,
+  zone.addEventListener("dragleave", () => {
+    zone.classList.remove("drag-over");
   });
 
-  savePlayers();
-  form.reset();
-  makeAttributeControls();
-  document.querySelector("#playerName").focus();
+  zone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    zone.classList.remove("drag-over");
+
+    const playerId = event.dataTransfer.getData("text/plain");
+    const team = zone.dataset.team;
+    if (!playerId || !team) return;
+
+    movePlayer(playerId, team);
+  });
+});
+
+resetTeamsButton.addEventListener("click", () => {
+  assignments = roster.reduce((result, player) => {
+    result[player.id] = "bench";
+    return result;
+  }, {});
+  saveAssignments();
   render();
 });
 
-clearAllButton.addEventListener("click", () => {
-  if (!isAdmin) return;
-
-  const confirmed = confirm("Quieres borrar todos los jugadores cargados?");
-  if (!confirmed) return;
-
-  players = [];
-  savePlayers();
-  render();
-});
-
-adminLoginForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const data = new FormData(adminLoginForm);
-  const user = data.get("adminUser").trim();
-  const password = data.get("adminPassword");
-
-  if (user === adminCredentials.user && password === adminCredentials.password) {
-    isAdmin = true;
-    adminLoginForm.reset();
-    updateAdminUi();
-    return;
-  }
-
-  loginMessage.textContent = "Usuario o clave incorrectos.";
-});
-
-logoutButton.addEventListener("click", () => {
-  isAdmin = false;
-  updateAdminUi();
-});
-
-localStorage.removeItem("football-simulator-admin");
-makeAttributeControls();
-updateAdminUi();
+render();

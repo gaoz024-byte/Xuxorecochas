@@ -170,12 +170,12 @@ h1 {
 
 .workspace {
   display: grid;
-  grid-template-columns: 350px minmax(0, 1fr);
+  grid-template-columns: 390px minmax(0, 1fr);
   gap: 18px;
   align-items: start;
 }
 
-.player-builder {
+.roster-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
@@ -184,11 +184,7 @@ h1 {
   top: 18px;
 }
 
-.player-builder.locked {
-  opacity: 0.78;
-}
-
-.locked-note {
+.hint {
   border: 1px solid rgba(194, 138, 20, 0.26);
   border-radius: 6px;
   background: rgba(194, 138, 20, 0.1);
@@ -210,11 +206,6 @@ h1 {
 .panel-heading h2,
 .team-zone h2 {
   font-size: 1.05rem;
-}
-
-.player-form {
-  display: grid;
-  gap: 14px;
 }
 
 label {
@@ -412,6 +403,23 @@ select:focus {
   padding-right: 4px;
 }
 
+.bench-grid {
+  max-height: 720px;
+  padding: 2px 4px 2px 0;
+}
+
+.drop-zone {
+  transition:
+    background-color 0.2s ease,
+    outline-color 0.2s ease;
+}
+
+.drop-zone.drag-over {
+  outline: 3px solid rgba(225, 170, 34, 0.85);
+  outline-offset: 4px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
 .player-card {
   border: 1px solid rgba(255, 255, 255, 0.38);
   border-radius: 8px;
@@ -420,13 +428,41 @@ select:focus {
   padding: 12px;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(10px);
+  cursor: grab;
+  user-select: none;
+}
+
+.player-card:active {
+  cursor: grabbing;
+}
+
+.player-card.dragging {
+  opacity: 0.55;
 }
 
 .player-card-top {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 10px;
+}
+
+.photo-slot {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  border: 1px dashed rgba(23, 32, 26, 0.35);
+  border-radius: 8px;
+  background: #f7f5ee;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.player-title {
+  min-width: 0;
 }
 
 .player-card h3 {
@@ -469,7 +505,7 @@ select:focus {
 
 .attribute-row {
   display: grid;
-  grid-template-columns: 86px 1fr 24px;
+  grid-template-columns: 106px minmax(0, 1fr) 24px;
   gap: 7px;
   align-items: center;
   font-size: 0.78rem;
@@ -509,7 +545,7 @@ select:focus {
     align-items: stretch;
   }
 
-  .player-builder {
+  .roster-panel {
     position: static;
   }
 
@@ -530,6 +566,10 @@ select:focus {
 
   .score-grid {
     grid-template-columns: 1fr;
+  }
+
+  .workspace {
+    gap: 14px;
   }
 
   .pitch {
