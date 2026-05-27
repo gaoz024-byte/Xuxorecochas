@@ -9,12 +9,25 @@ const attributes = [
 ];
 
 const storageKey = "football-simulator-players";
+const adminSessionKey = "football-simulator-admin";
+const adminCredentials = {
+  user: "admin",
+  password: "admin123",
+};
+
 const form = document.querySelector("#playerForm");
 const attributeControls = document.querySelector("#attributeControls");
 const template = document.querySelector("#playerCardTemplate");
 const clearAllButton = document.querySelector("#clearAllButton");
+const playerBuilder = document.querySelector("#playerBuilder");
+const lockedNote = document.querySelector("#lockedNote");
+const adminLoginForm = document.querySelector("#adminLoginForm");
+const adminSession = document.querySelector("#adminSession");
+const loginMessage = document.querySelector("#loginMessage");
+const logoutButton = document.querySelector("#logoutButton");
 
 let players = loadPlayers();
+let isAdmin = localStorage.getItem(adminSessionKey) === "true";
 
 function loadPlayers() {
   try {
@@ -26,6 +39,24 @@ function loadPlayers() {
 
 function savePlayers() {
   localStorage.setItem(storageKey, JSON.stringify(players));
+}
+
+function setFormDisabled(disabled) {
+  form.querySelectorAll("input, select, button").forEach((control) => {
+    control.disabled = disabled;
+  });
+  clearAllButton.disabled = disabled;
+}
+
+function updateAdminUi() {
+  document.body.classList.toggle("is-admin", isAdmin);
+  playerBuilder.classList.toggle("locked", !isAdmin);
+  lockedNote.classList.toggle("hidden", isAdmin);
+  adminLoginForm.classList.toggle("hidden", isAdmin);
+  adminSession.classList.toggle("hidden", !isAdmin);
+  loginMessage.textContent = "";
+  setFormDisabled(!isAdmin);
+  render();
 }
 
 function makeAttributeControls() {
@@ -78,16 +109,24 @@ function getDifferenceClass(difference) {
 }
 
 function starString(value) {
-  return "★".repeat(value) + "☆".repeat(10 - value);
+  return "\u2605".repeat(value) + "\u2606".repeat(10 - value);
+}
+
+function clampStat(value) {
+  return Math.min(10, Math.max(1, Number(value) || 1));
 }
 
 function renderPlayer(player) {
   const card = template.content.firstElementChild.cloneNode(true);
   const total = getPlayerTotal(player);
+  const deleteButton = card.querySelector(".delete-player");
 
   card.querySelector("h3").textContent = player.name;
   card.querySelector("p").textContent = `${total} puntos`;
-  card.querySelector(".delete-player").addEventListener("click", () => {
+  deleteButton.classList.toggle("hidden", !isAdmin);
+  deleteButton.addEventListener("click", () => {
+    if (!isAdmin) return;
+
     players = players.filter((item) => item.id !== player.id);
     savePlayers();
     render();
@@ -108,7 +147,24 @@ function renderPlayer(player) {
 
     const number = document.createElement("dd");
     number.className = "number";
-    number.textContent = player.attributes[attribute];
+
+    if (isAdmin) {
+      const editor = document.createElement("input");
+      editor.type = "number";
+      editor.min = "1";
+      editor.max = "10";
+      editor.value = player.attributes[attribute];
+      editor.className = "stat-editor";
+      editor.setAttribute("aria-label", `${attribute} de ${player.name}`);
+      editor.addEventListener("change", () => {
+        player.attributes[attribute] = clampStat(editor.value);
+        savePlayers();
+        render();
+      });
+      number.append(editor);
+    } else {
+      number.textContent = player.attributes[attribute];
+    }
 
     row.append(term, stars, number);
     list.append(row);
@@ -147,6 +203,7 @@ function render() {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+  if (!isAdmin) return;
 
   const data = new FormData(form);
   const name = data.get("playerName").trim();
@@ -176,7 +233,9 @@ form.addEventListener("submit", (event) => {
 });
 
 clearAllButton.addEventListener("click", () => {
-  const confirmed = confirm("¿Quieres borrar todos los jugadores cargados?");
+  if (!isAdmin) return;
+
+  const confirmed = confirm("Quieres borrar todos los jugadores cargados?");
   if (!confirmed) return;
 
   players = [];
@@ -184,5 +243,29 @@ clearAllButton.addEventListener("click", () => {
   render();
 });
 
+adminLoginForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const data = new FormData(adminLoginForm);
+  const user = data.get("adminUser").trim();
+  const password = data.get("adminPassword");
+
+  if (user === adminCredentials.user && password === adminCredentials.password) {
+    isAdmin = true;
+    localStorage.setItem(adminSessionKey, "true");
+    adminLoginForm.reset();
+    updateAdminUi();
+    return;
+  }
+
+  loginMessage.textContent = "Usuario o clave incorrectos.";
+});
+
+logoutButton.addEventListener("click", () => {
+  isAdmin = false;
+  localStorage.removeItem(adminSessionKey);
+  updateAdminUi();
+});
+
 makeAttributeControls();
-render();
+updateAdminUi();

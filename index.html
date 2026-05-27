@@ -8,6 +8,33 @@
   </head>
   <body>
     <main class="app-shell">
+      <section class="admin-bar" aria-label="Acceso de administrador">
+        <form id="adminLoginForm" class="admin-login">
+          <label>
+            Administrador
+            <input id="adminUser" name="adminUser" type="text" placeholder="Usuario" autocomplete="username" />
+          </label>
+          <label>
+            Clave
+            <input
+              id="adminPassword"
+              name="adminPassword"
+              type="password"
+              placeholder="Clave"
+              autocomplete="current-password"
+            />
+          </label>
+          <button class="primary-button small-button" type="submit">Entrar</button>
+        </form>
+
+        <div id="adminSession" class="admin-session hidden">
+          <span>Modo administrador activo</span>
+          <button class="ghost-button" id="logoutButton" type="button">Salir</button>
+        </div>
+
+        <p id="loginMessage" class="login-message" aria-live="polite"></p>
+      </section>
+
       <section class="scoreboard" aria-label="Resumen de equipos">
         <div>
           <p class="eyebrow">Simulador</p>
@@ -31,11 +58,15 @@
       </section>
 
       <section class="workspace">
-        <aside class="player-builder" aria-label="Crear jugador">
+        <aside class="player-builder locked" id="playerBuilder" aria-label="Crear jugador">
           <div class="panel-heading">
             <h2>Nuevo jugador</h2>
             <button class="ghost-button" id="clearAllButton" type="button">Limpiar</button>
           </div>
+
+          <p class="locked-note" id="lockedNote">
+            Inicia sesion como administrador para agregar jugadores o modificar estadisticas.
+          </p>
 
           <form id="playerForm" class="player-form">
             <label>
