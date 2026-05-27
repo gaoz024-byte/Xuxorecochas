@@ -10,16 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const roster = [
-    { id: "xuxo", name: "Xuxo", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaDr-LTfHCA-xyQAZc6vGDaAPAWIwmSTP0-Q&s", attributes: { ataque: 2, defensa: 4, velocidad: 5, fisico: 8, dominio: 2, pase: 2, disparo: 1 } },
+    { id: "xuxo", name: "Xuxo", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaDr-LTfHCA-xyQAZc6vGDaAPAWIwmSTP0-Q&s", attributes: { ataque: 2, defensa: 4, velocidad: 5, fisico: 2, dominio: 2, pase: 2, disparo: 1 } },
     { id: "jaime", name: 'Jaime "el corrector" Gutierrez', photo: "https://www.papeleriamarin.com/3999-thickbox_default/corrector-liquido-en-boligrafo.jpg", attributes: { ataque: 6, defensa: 4, velocidad: 4, fisico: 2, dominio: 4, pase: 6, disparo: 6 } },
     { id: "rafa-el", name: "Rafa \u00e9l", photo: "https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/node/article/field_image/COLP_EXT_094265.jpg?h=bcca76a5&itok=2CHaqzhJ", attributes: { ataque: 7, defensa: 7, velocidad: 4, fisico: 5, dominio: 6, pase: 6, disparo: 8 } },
-    { id: "pastu", name: "Pastu", photo: "https://elolfato.com/region/robaron-ganado-en-el-norte-del-tolima-a-integrante-del-grupo-humoristico-los-trovadores-de", attributes: { ataque: 7, defensa: 3, velocidad: 5, fisico: 7, dominio: 4, pase: 6, disparo: 7 } },
+    { id: "pastu", name: "Pastu", photo: "https://elolfato.com/region/robaron-ganado-en-el-norte-del-tolima-a-integrante-del-grupo-humoristico-los-trovadores-de", attributes: { ataque: 7, defensa: 3, velocidad: 5, fisico: 7, dominio: 4, pase: 3, disparo: 7 } },
     { id: "pastu-jr", name: "Pastu Jr", photo: "https://th.bing.com/th/id/R.8039b546df0ee9a86391880724dcd37c?rik=DYl8MFY8f7oDPA&riu=http%3a%2f%2flostrovadoresdecuyes.weebly.com%2fuploads%2f3%2f7%2f1%2f9%2f37191669%2f226759-583622334996134-1581301024-n_2_orig.jpg&ehk=dgXfm9bhA9hKqBSelkNC%2biZy%2bF7EUScxfWM7GjdzgnE%3d&risl=&pid=ImgRaw&r=0", attributes: { ataque: 6, defensa: 2, velocidad: 4, fisico: 6, dominio: 4, pase: 3, disparo: 5 } },
     { id: "roberto", name: "Roberto", photo: "https://www.lanacion.com.ar/resizer/v2/roberto-LMY7CN7XU5C35L5YJTNMVFXMDQ.png?auth=d9ce9b9621a3ed1cf013ecf2dab86d9931c1292d5ab3c8a6d9dc82e7c1d7e2a7&width=1200&height=800&quality=70&smart=true", attributes: { arquero: 10 }, goalkeeper: true },
     { id: "xinxe", name: "Xinxe", photo: "https://jonan.com.co/cdn/shop/products/9043.png?v=1694176014", attributes: { arquero: 10 }, goalkeeper: true },
     { id: "xtilla", name: "Xtilla", photo: "https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/02/shingeki-no-kyojin-titan-bestia-hiperrealista.jpg?fit=1280%2C720&quality=80&ssl=1", attributes: { ataque: 2, defensa: 7, velocidad: 2, fisico: 3, dominio: 3, pase: 6, disparo: 2 } },
-    { id: "tropicono", name: "Tropico\u00f1o", photo: "https://mercaldas.vtexassets.com/arquivos/ids/1340663/Jugo-HIT-frutas-tropicales-x1000-ml_43728.jpg?v=638718757629800000", attributes: { ataque: 8, defensa: 3, velocidad: 8, fisico: 6, dominio: 7, pase: 5, disparo: 7 } },
-    { id: "nel-son", name: "Nel Son", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF7ZQswUwuuNEt-4UtSt4rntilh1L4OB_ylw&s", attributes: { ataque: 5, defensa: 4, velocidad: 3, fisico: 4, dominio: 5, pase: 4, disparo: 5 } },
+    { id: "tropicono", name: "Tropico\u00f1o", photo: "https://mercaldas.vtexassets.com/arquivos/ids/1340663/Jugo-HIT-frutas-tropicales-x1000-ml_43728.jpg?v=638718757629800000", attributes: { ataque: 8, defensa: 3, velocidad: 8, fisico: 6, dominio: 7, pase: 2, disparo: 6 } },
+    { id: "nel-son", name: "Nel Son", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF7ZQswUwuuNEt-4UtSt4rntilh1L4OB_ylw&s", attributes: { ataque: 6, defensa: 4, velocidad: 3, fisico: 4, dominio: 6, pase: 4, disparo: 5 } },
     { id: "loberto", name: "Loberto", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-PBulfWEjRw_B_wLAgfYTeI7wBYIhVzNtoQ&s", attributes: { ataque: 4, defensa: 4, velocidad: 4, fisico: 2, dominio: 2, pase: 3, disparo: 5 } },
   ];
 
