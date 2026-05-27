@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let state = loadState();
   let activeToken = null;
+  let suppressTokenClick = false;
 
   if (window.location.search) {
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -102,8 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function getDefaultPosition(team) {
     const count = getTeamPlayers(team).length;
     return {
-      x: team === "A" ? 20 + (count % 3) * 10 : 70 + (count % 3) * 10,
-      y: 20 + (count % 5) * 14,
+      x: team === "A" ? 18 + (count % 3) * 10 : 64 + (count % 3) * 10,
+      y: 24 + (count % 5) * 13,
     };
   }
 
@@ -193,7 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const photo = document.createElement("span");
     photo.className = "token-photo";
-    photo.textContent = "Foto";
 
     const remove = document.createElement("span");
     remove.className = "token-remove";
@@ -206,10 +206,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function startTokenDrag(event) {
     const token = event.currentTarget;
+    const playerId = token.dataset.playerId;
+    const startState = state[playerId];
+
     activeToken = {
-      playerId: token.dataset.playerId,
+      playerId,
+      pointerId: event.pointerId,
       moved: false,
+      startX: event.clientX,
+      startY: event.clientY,
+      original: { ...startState },
     };
+
     token.setPointerCapture(event.pointerId);
     token.classList.add("moving");
     event.preventDefault();
@@ -219,6 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!activeToken) return;
 
     const rect = pitch.getBoundingClientRect();
+    const movedEnough = Math.hypot(event.clientX - activeToken.startX, event.clientY - activeToken.startY) > 3;
+    if (!movedEnough && !activeToken.moved) return;
+
     const x = clamp(((event.clientX - rect.left) / rect.width) * 100, 6, 94);
     const y = clamp(((event.clientY - rect.top) / rect.height) * 100, 10, 92);
     const team = x < 50 ? "A" : "B";
@@ -244,11 +255,13 @@ document.addEventListener("DOMContentLoaded", () => {
       token.releasePointerCapture?.(event.pointerId);
     }
 
-    if (!activeToken.moved) {
-      movePlayer(activeToken.playerId, "bench");
-    } else {
+    if (activeToken.moved) {
       saveState();
       render();
+      suppressTokenClick = true;
+      window.setTimeout(() => {
+        suppressTokenClick = false;
+      }, 120);
     }
 
     activeToken = null;
@@ -329,6 +342,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.addEventListener("click", (event) => {
+    const token = event.target.closest(".field-token");
+    if (token) {
+      event.preventDefault();
+      if (suppressTokenClick) return;
+
+      movePlayer(token.dataset.playerId, "bench");
+      return;
+    }
+
     const button = event.target.closest(".move-button");
     if (!button) return;
 
