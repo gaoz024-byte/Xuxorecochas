@@ -534,6 +534,36 @@ select:focus {
   font-weight: 900;
 }
 
+.move-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.move-button {
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f7f5ee;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.move-button:hover {
+  background: #ebe7dc;
+}
+
+.empty-state {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
 @media (max-width: 1040px) {
   .scoreboard,
   .workspace {
