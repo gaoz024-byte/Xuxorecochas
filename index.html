@@ -36,12 +36,12 @@
             <h2>Jugadores disponibles</h2>
             <button class="ghost-button" id="resetTeamsButton" type="button">Reiniciar</button>
           </div>
-          <p class="hint">Arrastra cada tarjeta a un equipo. Tambien puedes usar los botones A, B o Banca.</p>
+          <p class="hint">Usa los botones A o B para enviar al campo. Luego mueve el icono dentro de la cancha.</p>
           <div id="benchPlayers" class="players-grid bench-grid drop-zone" data-team="bench"></div>
         </aside>
 
         <section class="pitch-wrap" aria-label="Cancha y equipos">
-          <div class="pitch">
+          <div class="pitch drop-zone" id="pitch" data-team="field">
             <div class="pitch-lines">
               <div class="center-circle"></div>
               <div class="mid-line"></div>
@@ -56,7 +56,6 @@
                 <h2>Equipo A</h2>
                 <span id="teamACount">0 jugadores</span>
               </header>
-              <div id="teamAPlayers" class="players-grid"></div>
             </div>
 
             <div class="team-zone right-zone drop-zone" data-team="B">
@@ -64,8 +63,9 @@
                 <h2>Equipo B</h2>
                 <span id="teamBCount">0 jugadores</span>
               </header>
-              <div id="teamBPlayers" class="players-grid"></div>
             </div>
+
+            <div id="fieldPlayers" class="field-players" aria-label="Jugadores en el campo"></div>
           </div>
         </section>
       </section>
@@ -84,6 +84,6 @@
       </article>
     </template>
 
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
   </body>
 </html>
