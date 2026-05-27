@@ -9,7 +9,6 @@ const attributes = [
 ];
 
 const storageKey = "football-simulator-players";
-const adminSessionKey = "football-simulator-admin";
 const adminCredentials = {
   user: "admin",
   password: "admin123",
@@ -27,7 +26,11 @@ const loginMessage = document.querySelector("#loginMessage");
 const logoutButton = document.querySelector("#logoutButton");
 
 let players = loadPlayers();
-let isAdmin = localStorage.getItem(adminSessionKey) === "true";
+let isAdmin = false;
+
+if (window.location.search) {
+  window.history.replaceState({}, document.title, window.location.pathname);
+}
 
 function loadPlayers() {
   try {
@@ -252,7 +255,6 @@ adminLoginForm.addEventListener("submit", (event) => {
 
   if (user === adminCredentials.user && password === adminCredentials.password) {
     isAdmin = true;
-    localStorage.setItem(adminSessionKey, "true");
     adminLoginForm.reset();
     updateAdminUi();
     return;
@@ -263,9 +265,9 @@ adminLoginForm.addEventListener("submit", (event) => {
 
 logoutButton.addEventListener("click", () => {
   isAdmin = false;
-  localStorage.removeItem(adminSessionKey);
   updateAdminUi();
 });
 
+localStorage.removeItem("football-simulator-admin");
 makeAttributeControls();
 updateAdminUi();

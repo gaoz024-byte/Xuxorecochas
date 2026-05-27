@@ -9,7 +9,7 @@
   <body>
     <main class="app-shell">
       <section class="admin-bar" aria-label="Acceso de administrador">
-        <form id="adminLoginForm" class="admin-login">
+        <form id="adminLoginForm" class="admin-login" autocomplete="off">
           <label>
             Administrador
             <input id="adminUser" name="adminUser" type="text" placeholder="Usuario" autocomplete="username" />
@@ -61,7 +61,7 @@
         <aside class="player-builder locked" id="playerBuilder" aria-label="Crear jugador">
           <div class="panel-heading">
             <h2>Nuevo jugador</h2>
-            <button class="ghost-button" id="clearAllButton" type="button">Limpiar</button>
+            <button class="ghost-button" id="clearAllButton" type="button" disabled>Limpiar</button>
           </div>
 
           <p class="locked-note" id="lockedNote">
@@ -71,12 +71,12 @@
           <form id="playerForm" class="player-form">
             <label>
               Nombre
-              <input id="playerName" name="playerName" type="text" placeholder="Ej. Valderrama" required />
+            <input id="playerName" name="playerName" type="text" placeholder="Ej. Valderrama" required disabled />
             </label>
 
             <label>
               Equipo
-              <select id="playerTeam" name="playerTeam">
+              <select id="playerTeam" name="playerTeam" disabled>
                 <option value="A">Equipo A</option>
                 <option value="B">Equipo B</option>
               </select>
@@ -84,7 +84,7 @@
 
             <div id="attributeControls" class="attributes-form"></div>
 
-            <button class="primary-button" type="submit">Agregar jugador</button>
+            <button class="primary-button" type="submit" disabled>Agregar jugador</button>
           </form>
         </aside>
 
