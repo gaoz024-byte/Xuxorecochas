@@ -1,20 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const formationsKey = "football-simulator-saved-formations-v1";
   const savedFormations = document.querySelector("#savedFormations");
   const clearFormationsButton = document.querySelector("#clearFormationsButton");
-
-  function loadFormations() {
-    try {
-      const formations = JSON.parse(localStorage.getItem(formationsKey)) || [];
-      return Array.isArray(formations) ? formations : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveFormations(formations) {
-    localStorage.setItem(formationsKey, JSON.stringify(formations));
-  }
+  const supabaseClient = getSupabaseClient();
 
   function formatDate(value) {
     return new Intl.DateTimeFormat("es-CO", {
@@ -27,16 +14,41 @@ document.addEventListener("DOMContentLoaded", () => {
     return Object.values(formation.state || {}).filter((player) => player.team === team).length;
   }
 
-  function render() {
-    const formations = loadFormations().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  function showEmpty(text) {
+    savedFormations.innerHTML = "";
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.textContent = text;
+    savedFormations.append(empty);
+  }
+
+  async function loadFormations() {
+    if (!supabaseClient) {
+      clearFormationsButton.classList.add("hidden");
+      showEmpty("Falta configurar Supabase en supabase-config.js.");
+      return;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("formations")
+      .select("id,name,state,created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      clearFormationsButton.classList.add("hidden");
+      showEmpty("No se pudieron cargar las formaciones desde Supabase.");
+      return;
+    }
+
+    render(data || []);
+  }
+
+  function render(formations) {
     savedFormations.innerHTML = "";
     clearFormationsButton.classList.toggle("hidden", formations.length === 0);
 
     if (!formations.length) {
-      const empty = document.createElement("p");
-      empty.className = "empty-state";
-      empty.textContent = "Todavia no hay formaciones guardadas.";
-      savedFormations.append(empty);
+      showEmpty("Todavia no hay formaciones guardadas.");
       return;
     }
 
@@ -49,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title.textContent = formation.name || "Formacion guardada";
 
       const meta = document.createElement("p");
-      meta.textContent = `${formatDate(formation.createdAt)} · Equipo A: ${getTeamCount(formation, "A")} · Equipo B: ${getTeamCount(formation, "B")}`;
+      meta.textContent = `${formatDate(formation.created_at)} · Equipo A: ${getTeamCount(formation, "A")} · Equipo B: ${getTeamCount(formation, "B")}`;
 
       const open = document.createElement("a");
       open.className = "ghost-link";
@@ -62,11 +74,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  clearFormationsButton.addEventListener("click", () => {
+  clearFormationsButton.addEventListener("click", async () => {
+    if (!supabaseClient) return;
     if (!confirm("¿Quieres borrar todas las formaciones guardadas?")) return;
-    saveFormations([]);
-    render();
+
+    const { error } = await supabaseClient.from("formations").delete().not("id", "is", null);
+    if (error) {
+      showEmpty("No se pudieron borrar las formaciones.");
+      return;
+    }
+
+    loadFormations();
   });
 
-  render();
+  loadFormations();
 });

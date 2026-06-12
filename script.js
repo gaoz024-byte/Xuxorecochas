@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const attributes = [
     { key: "ataque", label: "Ataque" },
     { key: "defensa", label: "Defensa" },
@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: "loberto", name: "Loberto", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-PBulfWEjRw_B_wLAgfYTeI7wBYIhVzNtoQ&s", attributes: { ataque: 4, defensa: 4, velocidad: 4, fisico: 2, dominio: 2, pase: 3, disparo: 5 } },
   ];
 
-  const stateKey = "football-simulator-field-state-v1";
-  const formationsKey = "football-simulator-saved-formations-v1";
   const cardTemplate = document.querySelector("#playerCardTemplate");
   const benchPlayers = document.querySelector("#benchPlayers");
   const fieldPlayers = document.querySelector("#fieldPlayers");
@@ -34,8 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveMessage = document.querySelector("#saveMessage");
   const params = new URLSearchParams(window.location.search);
   const loadedFormationId = params.get("formation");
+  const supabaseClient = getSupabaseClient();
 
-  let state = loadState();
+  let state = await loadState();
   let activeToken = null;
   let suppressTokenClick = false;
 
@@ -58,31 +57,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }, {});
   }
 
-  function loadFormations() {
-    try {
-      const formations = JSON.parse(localStorage.getItem(formationsKey)) || [];
-      return Array.isArray(formations) ? formations : [];
-    } catch {
-      return [];
-    }
+  async function loadFormation(formationId) {
+    if (!supabaseClient || !formationId) return null;
+
+    const { data, error } = await supabaseClient
+      .from("formations")
+      .select("state")
+      .eq("id", formationId)
+      .maybeSingle();
+
+    if (error || !data?.state) return null;
+    return data.state;
   }
 
-  function loadState() {
+  async function loadState() {
     if (loadedFormationId) {
-      const formation = loadFormations().find((item) => item.id === loadedFormationId);
-      if (formation?.state) return normalizeState(formation.state);
+      const savedState = await loadFormation(loadedFormationId);
+      if (savedState) return normalizeState(savedState);
+      showSaveMessage("No se pudo cargar esa formacion desde Supabase.");
     }
 
-    try {
-      const stored = JSON.parse(localStorage.getItem(stateKey)) || {};
-      return normalizeState(stored);
-    } catch {
-      return makeInitialState();
-    }
+    return makeInitialState();
   }
 
   function saveState() {
-    localStorage.setItem(stateKey, JSON.stringify(state));
+    return state;
   }
 
   function clamp(value, min, max) {
@@ -352,19 +351,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2800);
   }
 
-  function saveFormation() {
-    const formations = loadFormations();
-    const createdAt = new Date().toISOString();
+  async function saveFormation() {
+    if (!supabaseClient) {
+      showSaveMessage("Falta configurar Supabase en supabase-config.js.");
+      return;
+    }
+
+    const createdAt = new Date();
     const formation = {
-      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      name: `Formacion ${formations.length + 1}`,
-      createdAt,
+      name: `Formacion ${createdAt.toLocaleDateString("es-CO")} ${createdAt.toLocaleTimeString("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`,
       state: typeof structuredClone === "function" ? structuredClone(state) : JSON.parse(JSON.stringify(state)),
     };
 
-    formations.push(formation);
-    localStorage.setItem(formationsKey, JSON.stringify(formations));
-    showSaveMessage("Formacion guardada. Puedes verla en la pagina inicial.");
+    const { error } = await supabaseClient.from("formations").insert(formation);
+    if (error) {
+      showSaveMessage("No se pudo guardar la formacion en Supabase.");
+      return;
+    }
+
+    showSaveMessage("Formacion guardada en Supabase. Puedes verla en la pagina inicial.");
   }
 
   function render() {
