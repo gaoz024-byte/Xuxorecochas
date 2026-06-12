@@ -3,87 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simulador de Equipos de Futbol</title>
+    <title>Combos de Futbol</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <section class="scoreboard" aria-label="Resumen de equipos">
-        <div>
-          <p class="eyebrow">Simulador</p>
-          <h1>¿Cómo van los combos?</h1>
-        </div>
-
-        <div class="score-grid">
-          <article class="score-card team-a">
-            <span>Equipo A</span>
-            <strong id="teamATotal">0</strong>
-          </article>
-          <article class="score-card balance-card">
-            <span>Diferencia</span>
-            <strong id="differenceScore" class="diff good">0</strong>
-          </article>
-          <article class="score-card team-b">
-            <span>Equipo B</span>
-            <strong id="teamBTotal">0</strong>
-          </article>
-        </div>
+    <main class="home-shell">
+      <section class="home-hero" aria-labelledby="homeTitle">
+        <p class="eyebrow">Simulador</p>
+        <h1 id="homeTitle">Combos de Futbol</h1>
+        <p class="home-copy">Crea equipos, guarda la formacion y vuelve a verla cuando quieras.</p>
+        <a class="primary-link" href="combos.html">Crear combos</a>
       </section>
 
-      <section class="workspace">
-        <aside class="roster-panel" aria-label="Jugadores disponibles">
-          <div class="panel-heading">
-            <h2>Jugadores disponibles</h2>
-            <button class="ghost-button" id="resetTeamsButton" type="button">Reiniciar</button>
-          </div>
-          <p class="hint">Usa los botones A o B para enviar al campo. Luego mueve el icono dentro de la cancha.</p>
-          <div id="benchPlayers" class="players-grid bench-grid drop-zone" data-team="bench"></div>
-        </aside>
-
-        <section class="pitch-wrap" aria-label="Cancha y equipos">
-          <div class="pitch drop-zone" id="pitch" data-team="field">
-            <div class="pitch-lines">
-              <div class="center-circle"></div>
-              <div class="mid-line"></div>
-              <div class="box box-left"></div>
-              <div class="box box-right"></div>
-              <div class="goal goal-left"></div>
-              <div class="goal goal-right"></div>
-            </div>
-
-            <div class="team-zone left-zone drop-zone" data-team="A">
-              <header>
-                <h2>Equipo A</h2>
-                <span id="teamACount">0 jugadores</span>
-              </header>
-            </div>
-
-            <div class="team-zone right-zone drop-zone" data-team="B">
-              <header>
-                <h2>Equipo B</h2>
-                <span id="teamBCount">0 jugadores</span>
-              </header>
-            </div>
-
-            <div id="fieldPlayers" class="field-players" aria-label="Jugadores en el campo"></div>
-          </div>
-        </section>
+      <section class="saved-panel" aria-labelledby="savedTitle">
+        <div class="panel-heading">
+          <h2 id="savedTitle">Formaciones guardadas</h2>
+          <button class="ghost-button hidden" id="clearFormationsButton" type="button">Borrar todo</button>
+        </div>
+        <div id="savedFormations" class="saved-list"></div>
       </section>
     </main>
 
-    <template id="playerCardTemplate">
-      <article class="player-card" draggable="true">
-        <div class="player-card-top">
-          <div class="photo-slot">Foto</div>
-          <div class="player-title">
-            <h3></h3>
-            <p></p>
-          </div>
-        </div>
-        <dl class="attribute-list"></dl>
-      </article>
-    </template>
-
-    <script src="script.js?v=7"></script>
+    <script src="home.js"></script>
   </body>
 </html>

@@ -1,14 +1,12 @@
-Guarda las imagenes con estos nombres exactos:
+Archivos para subir a GitHub
 
-1. Xtilla -> xtilla.jpg
-2. Pastu Jr -> pastu-jr.jpg
-3. Pastu -> pastu.jpg
-4. Xinxe -> xinxe.jpg
-5. Tropicono -> tropicono.jpg
-6. Jaime "el corrector" Gutierrez -> jaime.jpg
-7. Loberto -> loberto.jpg
-8. Rafa el -> rafa-el.jpg
-9. Nel Son -> nel-son.jpg
-10. Roberto -> roberto.jpg
+Sube estos archivos juntos en la raiz del repositorio:
 
-Xuxo no recibio imagen en esta tanda, por eso queda con avatar estandar.
+- index.html: pagina inicial con el boton Crear combos y la lista de formaciones guardadas.
+- combos.html: pagina de la cancha para crear o visitar una formacion.
+- styles.css: estilos compartidos por la portada y la cancha.
+- home.js: controla la pagina inicial y muestra las formaciones guardadas.
+- script.js: controla la cancha, los jugadores y el guardado de formaciones.
+
+Importante:
+Las formaciones se guardan en el navegador de cada persona usando localStorage. Si abres la pagina desde otro navegador o dispositivo, esa lista empezara vacia.

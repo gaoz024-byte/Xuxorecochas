@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { key: "ataque", label: "Ataque" },
     { key: "defensa", label: "Defensa" },
     { key: "velocidad", label: "Velocidad" },
-    { key: "fisico", label: "F\u00edsico" },
+    { key: "fisico", label: "Físico" },
     { key: "dominio", label: "Dominio" },
     { key: "pase", label: "Pase" },
     { key: "disparo", label: "Disparo al arco" },
@@ -12,31 +12,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const roster = [
     { id: "xuxo", name: "Xuxo", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaDr-LTfHCA-xyQAZc6vGDaAPAWIwmSTP0-Q&s", attributes: { ataque: 2, defensa: 4, velocidad: 5, fisico: 2, dominio: 2, pase: 2, disparo: 1 } },
     { id: "jaime", name: 'Jaime "el corrector" Gutierrez', photo: "https://www.papeleriamarin.com/3999-thickbox_default/corrector-liquido-en-boligrafo.jpg", attributes: { ataque: 4, defensa: 6, velocidad: 2, fisico: 2, dominio: 4, pase: 6, disparo: 6 } },
-    { id: "rafa-el", name: "Rafa \u00e9l", photo: "https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/node/article/field_image/COLP_EXT_094265.jpg?h=bcca76a5&itok=2CHaqzhJ", attributes: { ataque: 4, defensa: 7, velocidad: 4, fisico: 5, dominio: 6, pase: 6, disparo: 9 } },
+    { id: "rafa-el", name: "Rafa él", photo: "https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/node/article/field_image/COLP_EXT_094265.jpg?h=bcca76a5&itok=2CHaqzhJ", attributes: { ataque: 4, defensa: 7, velocidad: 4, fisico: 5, dominio: 6, pase: 6, disparo: 9 } },
     { id: "pastu", name: "Pastu", photo: "https://elolfato.com/region/robaron-ganado-en-el-norte-del-tolima-a-integrante-del-grupo-humoristico-los-trovadores-de", attributes: { ataque: 7, defensa: 3, velocidad: 5, fisico: 7, dominio: 4, pase: 3, disparo: 7 } },
     { id: "pastu-jr", name: "Pastu Jr", photo: "https://th.bing.com/th/id/R.8039b546df0ee9a86391880724dcd37c?rik=DYl8MFY8f7oDPA&riu=http%3a%2f%2flostrovadoresdecuyes.weebly.com%2fuploads%2f3%2f7%2f1%2f9%2f37191669%2f226759-583622334996134-1581301024-n_2_orig.jpg&ehk=dgXfm9bhA9hKqBSelkNC%2biZy%2bF7EUScxfWM7GjdzgnE%3d&risl=&pid=ImgRaw&r=0", attributes: { ataque: 6, defensa: 2, velocidad: 4, fisico: 6, dominio: 4, pase: 3, disparo: 5 } },
     { id: "roberto", name: "Roberto", photo: "https://www.lanacion.com.ar/resizer/v2/roberto-LMY7CN7XU5C35L5YJTNMVFXMDQ.png?auth=d9ce9b9621a3ed1cf013ecf2dab86d9931c1292d5ab3c8a6d9dc82e7c1d7e2a7&width=1200&height=800&quality=70&smart=true", attributes: { arquero: 10 }, goalkeeper: true },
     { id: "xinxe", name: "Xinxe", photo: "https://jonan.com.co/cdn/shop/products/9043.png?v=1694176014", attributes: { arquero: 10 }, goalkeeper: true },
     { id: "xtilla", name: "Xtilla", photo: "https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/02/shingeki-no-kyojin-titan-bestia-hiperrealista.jpg?fit=1280%2C720&quality=80&ssl=1", attributes: { ataque: 2, defensa: 7, velocidad: 2, fisico: 1, dominio: 3, pase: 6, disparo: 2 } },
-    { id: "tropicono", name: "Tropico\u00f1o", photo: "https://mercaldas.vtexassets.com/arquivos/ids/1340663/Jugo-HIT-frutas-tropicales-x1000-ml_43728.jpg?v=638718757629800000", attributes: { ataque: 8, defensa: 1, velocidad: 8, fisico: 6, dominio: 6, pase: 2, disparo: 6 } },
+    { id: "tropicono", name: "Tropicoño", photo: "https://mercaldas.vtexassets.com/arquivos/ids/1340663/Jugo-HIT-frutas-tropicales-x1000-ml_43728.jpg?v=638718757629800000", attributes: { ataque: 8, defensa: 1, velocidad: 8, fisico: 6, dominio: 6, pase: 2, disparo: 6 } },
     { id: "nel-son", name: "Nel Son", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF7ZQswUwuuNEt-4UtSt4rntilh1L4OB_ylw&s", attributes: { ataque: 6, defensa: 4, velocidad: 3, fisico: 4, dominio: 7, pase: 6, disparo: 5 } },
     { id: "loberto", name: "Loberto", photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-PBulfWEjRw_B_wLAgfYTeI7wBYIhVzNtoQ&s", attributes: { ataque: 4, defensa: 4, velocidad: 4, fisico: 2, dominio: 2, pase: 3, disparo: 5 } },
   ];
 
   const stateKey = "football-simulator-field-state-v1";
+  const formationsKey = "football-simulator-saved-formations-v1";
   const cardTemplate = document.querySelector("#playerCardTemplate");
   const benchPlayers = document.querySelector("#benchPlayers");
   const fieldPlayers = document.querySelector("#fieldPlayers");
   const pitch = document.querySelector("#pitch");
   const resetTeamsButton = document.querySelector("#resetTeamsButton");
+  const saveFormationButton = document.querySelector("#saveFormationButton");
+  const saveMessage = document.querySelector("#saveMessage");
+  const params = new URLSearchParams(window.location.search);
+  const loadedFormationId = params.get("formation");
 
   let state = loadState();
   let activeToken = null;
   let suppressTokenClick = false;
-
-  if (window.location.search) {
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
 
   function makeInitialState() {
     return roster.reduce((result, player) => {
@@ -45,18 +46,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }, {});
   }
 
+  function normalizeState(source = {}) {
+    return roster.reduce((result, player) => {
+      const saved = source[player.id] || {};
+      result[player.id] = {
+        team: ["A", "B", "bench"].includes(saved.team) ? saved.team : "bench",
+        x: clamp(saved.x ?? 50, 6, 94),
+        y: clamp(saved.y ?? 50, 10, 92),
+      };
+      return result;
+    }, {});
+  }
+
+  function loadFormations() {
+    try {
+      const formations = JSON.parse(localStorage.getItem(formationsKey)) || [];
+      return Array.isArray(formations) ? formations : [];
+    } catch {
+      return [];
+    }
+  }
+
   function loadState() {
+    if (loadedFormationId) {
+      const formation = loadFormations().find((item) => item.id === loadedFormationId);
+      if (formation?.state) return normalizeState(formation.state);
+    }
+
     try {
       const stored = JSON.parse(localStorage.getItem(stateKey)) || {};
-      return roster.reduce((result, player) => {
-        const saved = stored[player.id] || {};
-        result[player.id] = {
-          team: ["A", "B", "bench"].includes(saved.team) ? saved.team : "bench",
-          x: clamp(saved.x ?? 50, 6, 94),
-          y: clamp(saved.y ?? 50, 10, 92),
-        };
-        return result;
-      }, {});
+      return normalizeState(stored);
     } catch {
       return makeInitialState();
     }
@@ -97,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function starString(value) {
-    return "\u2605".repeat(value) + "\u2606".repeat(10 - value);
+    return "★".repeat(value) + "☆".repeat(10 - value);
   }
 
   function getDefaultPosition(team) {
@@ -325,6 +344,29 @@ document.addEventListener("DOMContentLoaded", () => {
     differenceElement.className = `diff ${getDifferenceClass(difference)}`;
   }
 
+  function showSaveMessage(text) {
+    saveMessage.textContent = text;
+    window.clearTimeout(showSaveMessage.timeout);
+    showSaveMessage.timeout = window.setTimeout(() => {
+      saveMessage.textContent = "";
+    }, 2800);
+  }
+
+  function saveFormation() {
+    const formations = loadFormations();
+    const createdAt = new Date().toISOString();
+    const formation = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: `Formacion ${formations.length + 1}`,
+      createdAt,
+      state: typeof structuredClone === "function" ? structuredClone(state) : JSON.parse(JSON.stringify(state)),
+    };
+
+    formations.push(formation);
+    localStorage.setItem(formationsKey, JSON.stringify(formations));
+    showSaveMessage("Formacion guardada. Puedes verla en la pagina inicial.");
+  }
+
   function render() {
     renderBench();
     renderField();
@@ -378,6 +420,8 @@ document.addEventListener("DOMContentLoaded", () => {
     saveState();
     render();
   });
+
+  saveFormationButton.addEventListener("click", saveFormation);
 
   render();
 });
